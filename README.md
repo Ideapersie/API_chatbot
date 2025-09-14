@@ -1,55 +1,6 @@
 # API_chatbot
-Create a chatbot with a vercel frontend? using KPIT's API key for the chatbot
+Creating a simple website hosting a chatbot where the user can enter their own LLM's API key of choice, with extension of RAG and Agents in developmet
 
-Project Structure
-
-  api-chatbot/
-  ├── src/
-  │   ├── components/
-  │   │   ├── chat/
-  │   │   │   ├── ChatWindow.jsx
-  │   │   │   ├── MessageBubble.jsx
-  │   │   │   ├── InputArea.jsx
-  │   │   │   └── TypingIndicator.jsx
-  │   │   ├── ui/
-  │   │   │   ├── Button.jsx
-  │   │   │   ├── Input.jsx
-  │   │   │   └── LoadingSpinner.jsx
-  │   │   └── layout/
-  │   │       ├── Header.jsx
-  │   │       └── Layout.jsx
-  │   ├── services/
-  │   │   ├── api/
-  │   │   │   ├── llmClient.js
-  │   │   │   ├── ragService.js
-  │   │   │   └── agentService.js
-  │   │   └── hooks/
-  │   │       ├── useChat.js
-  │   │       ├── useRAG.js
-  │   │       └── useAgent.js
-  │   ├── utils/
-  │   │   ├── config.js
-  │   │   ├── constants.js
-  │   │   └── helpers.js
-  │   ├── styles/
-  │   │   ├── globals.css
-  │   │   └── components.css
-  │   └── pages/
-  │       ├── index.js
-  │       └── api/
-  │           ├── chat.js
-  │           ├── rag/
-  │           │   └── query.js
-  │           └── agents/
-  │               └── execute.js
-  ├── public/
-  │   ├── favicon.ico
-  │   └── logo.png
-  ├── .env.local
-  ├── .env.example
-  ├── vercel.json
-  ├── package.json
-  └── README.md
 
 ### Core Architecture
 
@@ -116,5 +67,3 @@ vercel
 ---
 
 Generated using Claude Code
-
-Co-Authored-By: Claude <noreply@anthropic.com>

@@ -75,14 +75,21 @@ const useChat = () => {
     abortControllerRef.current = new AbortController();
 
     try {
+      // Get user API key info if available
+      const userKeyData = apiKeyManager.getUserApiKey();
+
       const response = await fetch(API_ENDPOINTS.CHAT, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'text/plain',
+          'X-Stream': 'true'
         },
         body: JSON.stringify({
           message: messageContent,
-          history: messages.slice(-10) // Send last 10 messages for context
+          history: messages.slice(-10), // Send last 10 messages for context
+          userApiKey: userKeyData?.apiKey,
+          userBaseUrl: userKeyData?.baseUrl
         }),
         signal: abortControllerRef.current.signal
       });
@@ -94,7 +101,7 @@ const useChat = () => {
 
       // Check if the response is a stream
       const contentType = response.headers.get('content-type');
-      if (contentType && contentType.includes('text/stream')) {
+      if (contentType && contentType.includes('text/plain')) {
         // Handle streaming response
         const reader = response.body.getReader();
         const decoder = new TextDecoder();

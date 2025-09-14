@@ -10,6 +10,10 @@ class LLMClient {
   }
 
   getApiConfig() {
+    // If there's a temporary config (for server-side requests), use it
+    if (this.tempApiConfig) {
+      return this.tempApiConfig;
+    }
     return this.userApiKeyManager.getApiConfig();
   }
 

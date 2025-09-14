@@ -21,9 +21,24 @@ export default async function handler(req, res) {
     // Create LLM client instance
     const llmClient = new LLMClient();
 
-    // If user provided their own API key, temporarily override
+    // Set up API configuration for this request
     if (userApiKey) {
-      llmClient.userApiKeyManager.setUserApiKey(userApiKey, userBaseUrl);
+      // User provided their own API key
+      llmClient.tempApiConfig = {
+        apiKey: userApiKey,
+        baseUrl: userBaseUrl || process.env.KPIT_API_BASE_URL,
+        source: 'user'
+      };
+    } else {
+      // Use server API key (guest mode or fallback)
+      if (!process.env.KPIT_API_KEY) {
+        return res.status(401).json({ error: 'No API key configured. Please provide your own API key.' });
+      }
+      llmClient.tempApiConfig = {
+        apiKey: process.env.KPIT_API_KEY,
+        baseUrl: process.env.KPIT_API_BASE_URL,
+        source: 'server'
+      };
     }
 
     // Check if streaming is requested

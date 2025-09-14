@@ -116,5 +116,3 @@ vercel
 ---
 
 Generated using Claude Code
-
-Co-Authored-By: Claude <noreply@anthropic.com>

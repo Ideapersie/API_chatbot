@@ -1,8 +1,8 @@
 export const config = {
   api: {
     kpitApiKey: process.env.KPIT_API_KEY,
-    kpitBaseUrl: process.env.KPIT_API_BASE_URL || 'https://api.example.com',
-    kpitModelName: process.env.KPIT_MODEL_NAME || 'default-model',
+    kpitBaseUrl: process.env.KPIT_API_BASE_URL || 'https://llm-proxy.kpit.com/v1',
+    kpitModelName: process.env.KPIT_MODEL_NAME || 'kgpt-reasoning-text',
     timeout: 30000,
     // API Key Strategy
     requireUserApiKey: process.env.REQUIRE_USER_API_KEY === 'true',

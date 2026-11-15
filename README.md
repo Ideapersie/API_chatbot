@@ -1,69 +1,40 @@
-# API_chatbot
-Creating a simple website hosting a chatbot where the user can enter their own LLM's API key of choice, with extension of RAG and Agents in developmet
+# API Chatbot
 
+A bring-your-own-key chat app for any OpenAI-compatible LLM endpoint. Paste an API key and base URL, and you get a streaming chat interface backed by that model; the key stays in your browser and is sent only with your own requests. Built with Next.js 14 and Tailwind, deployable to Vercel as-is.
 
-### Core Architecture
+## Features
 
-  1. Frontend Framework: Next.js
+- **Streaming responses** over server-sent events from a Next.js API route (`src/pages/api/chat.js`), with a typing indicator and incremental rendering.
+- **Two key modes.** Users can supply their own key and base URL (stored in `localStorage`, attached per request), or the deployment can offer a limited guest mode on a server-side key.
+- **Conversation context** trimmed to the last 10 messages, and input validation (empty and over-length messages are rejected before any model call).
+- **Model-agnostic client** (`src/services/api/llmClient.js`) that talks to any OpenAI-style `/chat/completions` endpoint.
 
-  - Why: Perfect for Vercel deployment, API routes, SSR/SSG capabilities
-  - Styling: Tailwind CSS for rapid UI development
-  - State Management: React Context + useReducer for chat state
-
-
-  API Key Strategy Options
-
-  Option 1: User-Provided API Keys (Recommended for public hosting)
-  - Set REQUIRE_USER_API_KEY=true
-  - Users enter their own API keys
-  - Keys are stored locally in browser
-  - No cost to you, unlimited usage for users
-
-  Option 2: Guest Mode with Limited Usage
-  - Set ALLOW_GUEST_MODE=true and GUEST_MODE_LIMIT=10
-  - Users get X free messages using your API key
-  - After limit, they must provide their own key
-  - Good for demos/trials
-
-  Option 3: Hybrid Approach
-  - Both options enabled
-  - Users can choose between guest mode or their own key
-
-  Key Features Created
-
-  1. UserApiKeyManager - Handles API key storage and validation
-  2. Updated LLMClient - Works with both user and server API keys
-  3. ApiKeyModal - UI component for key management
-  4. Usage tracking - Monitors guest mode usage
-  5. Local storage - Keys never leave the user's browser
-
-  For Public Deployment
-
-  The cleanest approach is Option 1 where users provide their own keys:
-  - Zero API costs for you
-  - Users have full control
-  - Scales infinitely
-  - Most privacy-friendly
-
-## Development
-
-To get started:
+## Running it
 
 ```bash
 npm install
-cp .env.example .env.local
-# Configure your environment variables
-npm run dev
+cp .env.example .env.local     # set the API base URL, model name and, for guest mode, a server key
+npm run dev                    # http://localhost:3000
 ```
 
-## Deployment
+Deploy by importing the repo into Vercel; `vercel.json` is included. The environment variables are documented in `.env.example`. The `KPIT_*` names are historical and work with any OpenAI-compatible provider.
 
-Deploy to Vercel:
+## Structure
 
-```bash
-vercel
+```
+src/
+  pages/api/chat.js            chat endpoint: validation, key selection, streaming
+  pages/index.js               app shell
+  components/chat/             ChatWindow, MessageBubble, InputArea, TypingIndicator
+  components/ui/ApiKeyModal.jsx  key and base-URL entry
+  services/api/                LLM client and client-side key manager
+  services/hooks/useChat.js    chat state and stream handling
+chatbot_architect.py           design notes used to plan the architecture
 ```
 
----
+## Status and known gaps
 
-Generated using Claude Code
+The chat app is complete. RAG and agent tools are planned (placeholders exist in `.env.example`) but not implemented. Before running this as a public service:
+
+- The guest-mode usage counter lives in `localStorage`, so it's a UX limit rather than a real quota. A server-side rate limit (by IP or session) would be needed to protect the server key.
+- When a user supplies their own key, the endpoint also accepts a user-supplied base URL and proxies to it. Restrict that to an allowlist of known providers.
